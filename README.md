@@ -27,9 +27,9 @@ If you build an extension to this MVP contract this repo hopes to be a good home
 
 A simple deal bounty contract consists a list of the data CIDs that it incentives to store on Filecoin. Once a storage deals is made for the listed data, the data bounty hunter can claims the data bounty by providing the deal ID. The contract will check with the Filecoin storage market to confirm whether the supplied deal ID is activated and stores the claimed data. Once validated, the deal bounty contract will pay the bounty hunter out. 
 
-![dealmaking](../deal-bounty-contract/img/dealmaking.png)
-![addbounty](../deal-bounty-contract/img/addbounty.png)
-![claim](../deal-bounty-contract/img/claimdatabounty.png)
+<img src="/img/dealmaking.png" width="50%">
+<img src="/img/addbounty.png" width="50%">
+<img src="/img/claimdatabounty.png" width="50%">
 
 
 ### Deal Bounty Contract Modular Breakdown
