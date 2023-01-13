@@ -1,11 +1,7 @@
 # Deal Bounty Contract
 **A FVM compatible deal bounty contract example that empowers Filecoin Data DAOs uses cases.**
 
-This repo contains 
-1. [A solidity contract template]() that lists data bounties to claim, and pays out the bounty upon the deal proven to be activated on Filecoin.
-2. [A tiny mock market]() contract for prototyping against a realistic filecoin market
-3. [Low level solidity CBOR parsing functions](https://github.com/lotus-web3/client-contract/blob/main/src/CBORParse.sol#L129) of general use reading filecoin native data
-4. A home for the contracts you invent on top of these 
+This repo contains A solidity contract template that lists data bounties to claim, and pays out the bounty upon the deal proven to be activated on Filecoin.
 
 ### Install
 
