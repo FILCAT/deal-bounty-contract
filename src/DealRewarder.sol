@@ -5,6 +5,7 @@ import { MarketAPI } from "../lib/filecoin-solidity/contracts/v0.8/MarketAPI.sol
 import { CommonTypes } from "../lib/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol";
 import { MarketTypes } from "../lib/filecoin-solidity/contracts/v0.8/types/MarketTypes.sol";
 import { Actor } from "../lib/filecoin-solidity/contracts/v0.8/utils/Actor.sol";
+import { Misc } from "../lib/filecoin-solidity/contracts/v0.8/utils/Misc.sol";
 
 contract DealRewarder {
     mapping(bytes => bool) public cidSet;
@@ -47,7 +48,20 @@ contract DealRewarder {
         MarketTypes.GetDealClientReturn memory clientRet = MarketAPI.getDealClient(MarketTypes.GetDealClientParams({id: deal_id}));
 
         // send reward to client 
+        send(clientRet.client);
+    }
 
+    function toBytes64(uint64 x) internal pure returns (bytes memory b) {
+        b = new bytes(32);
+        assembly { mstore(add(b, 32), x) }
+    }
+
+
+    function send(uint64 actor_id) public {
+        uint METHOD_SEND = 0;
+        bytes memory emptyParams = "";
+        delete emptyParams;
+        Actor.call(METHOD_SEND, toBytes64(actor_id), emptyParams, Misc.NONE_CODEC);
     }
 
 }
