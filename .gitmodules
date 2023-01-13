@@ -7,3 +7,6 @@
 [submodule "lib/filecoin-solidity"]
 	path = lib/filecoin-solidity
 	url = https://github.com/Zondax/filecoin-solidity
+[submodule "lib/solidity-cborutils"]
+	path = lib/solidity-cborutils
+	url = https://github.com/smartcontractkit/solidity-cborutils
