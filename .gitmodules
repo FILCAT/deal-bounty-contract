@@ -10,3 +10,6 @@
 [submodule "lib/solidity-cborutils"]
 	path = lib/solidity-cborutils
 	url = https://github.com/smartcontractkit/solidity-cborutils
+[submodule "lib/buffer"]
+	path = lib/buffer
+	url = https://github.com/ensdomains/buffer
