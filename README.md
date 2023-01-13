@@ -1,7 +1,7 @@
 # Deal Bounty Contract
 **A FVM compatible deal bounty contract example that empowers Filecoin Data DAOs uses cases.**
 
-This repo contains A solidity contract template that lists data bounties to claim, and pays out the bounty upon the deal proven to be activated on Filecoin.
+This repo contains A solidity contract template that lists data bounties to claim, and pays out the bounty upon the deal proven to be made with the builtin filecoin builtin market.
 
 ### Install
 
