@@ -9,7 +9,7 @@
 	url = https://github.com/ZenGround0/filecoin-solidity.git
 [submodule "lib/solidity-cborutils"]
 	path = lib/solidity-cborutils
-	url = https://github.com/smartcontractkit/solidity-cborutils
+	url = https://github.com/ZenGround0/solidity-cborutils.git
 [submodule "lib/buffer"]
 	path = lib/buffer
 	url = https://github.com/ensdomains/buffer
