@@ -17,6 +17,12 @@ contract DealRewarder {
     uint64 constant DEFAULT_FLAG = 0x00000000;
     uint64 constant METHOD_SEND = 0;
     uint64 public debug_client_addr;
+    
+    /* debug failing claim_bounty */
+    bytes public latestAddCID;
+    bytes public witnessedCid;
+    uint public witnessedSize;
+    uint64 public witnessedProvider;
 
     constructor() {
         owner = msg.sender;
@@ -24,8 +30,10 @@ contract DealRewarder {
 
     function fund(uint64 unused) public payable {}
 
+// TODO check that there are enough funds so we don't run out
     function addCID(bytes calldata cidraw, uint size) public {
        require(msg.sender == owner);
+       latestAddCID = cidraw;
        cidSet[cidraw] = true;
        cidSizes[cidraw] = size;
     }
@@ -47,10 +55,9 @@ contract DealRewarder {
         MarketTypes.GetDealDataCommitmentReturn memory commitmentRet = MarketAPI.getDealDataCommitment(MarketTypes.GetDealDataCommitmentParams({id: deal_id}));
         MarketTypes.GetDealProviderReturn memory providerRet = MarketAPI.getDealProvider(MarketTypes.GetDealProviderParams({id: deal_id}));
 
-        // authorize data 
         authorizeData(commitmentRet.data, providerRet.provider, commitmentRet.size);
 
-        // get deal client
+        // get dealer (bounty hunter client)
         MarketTypes.GetDealClientReturn memory clientRet = MarketAPI.getDealClient(MarketTypes.GetDealClientParams({id: deal_id}));
 
         // send reward to client 
@@ -64,7 +71,7 @@ contract DealRewarder {
     }
 
     // send 1 FIL to the filecoin actor at actor_id
-    function send(uint64 actorID) public {
+    function send(uint64 actorID) internal {
         bytes memory emptyParams = "";
         delete emptyParams;
 
@@ -73,10 +80,6 @@ contract DealRewarder {
 
     }
 
-    function getDealClient(uint64 deal_id) public {
-            MarketTypes.GetDealClientReturn memory clientRet = MarketAPI.getDealClient(MarketTypes.GetDealClientParams({id: deal_id}));
-            debug_client_addr = clientRet.client;
-    }
 
 
 // actor id => valid id address bytes
