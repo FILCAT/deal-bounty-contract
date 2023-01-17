@@ -6,7 +6,7 @@
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
 [submodule "lib/filecoin-solidity"]
 	path = lib/filecoin-solidity
-	url = https://github.com/Zondax/filecoin-solidity
+	url = https://github.com/ZenGround0/filecoin-solidity.git
 [submodule "lib/solidity-cborutils"]
 	path = lib/solidity-cborutils
 	url = https://github.com/smartcontractkit/solidity-cborutils
