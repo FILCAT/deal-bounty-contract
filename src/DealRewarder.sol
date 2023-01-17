@@ -7,6 +7,16 @@ import { MarketTypes } from "../lib/filecoin-solidity/contracts/v0.8/types/Marke
 import { Actor, HyperActor } from "../lib/filecoin-solidity/contracts/v0.8/utils/Actor.sol";
 import { Misc } from "../lib/filecoin-solidity/contracts/v0.8/utils/Misc.sol";
 
+/* 
+Contract Usage
+    Step   |   Who   |    What is happening  |   Why 
+    ------------------------------------------------
+    Deploy | contract owner   | contract owner deploys address is owner who can call addCID  | create contract setting up rules to follow
+    AddCID | data pinners     | set up cids that the contract will incentivize in deals      | add request for a deal in the filecoin network, "store data" function
+    Fund   | contract funders |  add FIL to the contract to later by paid out by deal        | ensure the deal actually gets stored by providing funds for bounty hunter and (indirect) storage provider
+    Claim  | bounty hunter    | claim the incentive to complete the cycle                    | pay back the bounty hunter for doing work for the contract
+
+*/
 contract DealRewarder {
     mapping(bytes => bool) public cidSet;
     mapping(bytes => uint) public cidSizes;
@@ -16,13 +26,7 @@ contract DealRewarder {
     address constant CALL_ACTOR_ID = 0xfe00000000000000000000000000000000000005;
     uint64 constant DEFAULT_FLAG = 0x00000000;
     uint64 constant METHOD_SEND = 0;
-    uint64 public debug_client_addr;
     
-    /* debug failing claim_bounty */
-    bytes public latestAddCID;
-    bytes public witnessedCid;
-    uint public witnessedSize;
-    uint64 public witnessedProvider;
 
     constructor() {
         owner = msg.sender;
@@ -30,10 +34,8 @@ contract DealRewarder {
 
     function fund(uint64 unused) public payable {}
 
-// TODO check that there are enough funds so we don't run out
     function addCID(bytes calldata cidraw, uint size) public {
        require(msg.sender == owner);
-       latestAddCID = cidraw;
        cidSet[cidraw] = true;
        cidSizes[cidraw] = size;
     }
@@ -80,9 +82,5 @@ contract DealRewarder {
 
     }
 
-
-
-// actor id => valid id address bytes
-// make a deal and see if we can actually claim bounty
 }
 
