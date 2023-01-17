@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import { MarketAPI } from "../lib/filecoin-solidity/contracts/v0.8/MarketAPI.sol";
 import { CommonTypes } from "../lib/filecoin-solidity/contracts/v0.8/types/CommonTypes.sol";
 import { MarketTypes } from "../lib/filecoin-solidity/contracts/v0.8/types/MarketTypes.sol";
-import { Actor } from "../lib/filecoin-solidity/contracts/v0.8/utils/Actor.sol";
+import { Actor, HyperActor } from "../lib/filecoin-solidity/contracts/v0.8/utils/Actor.sol";
 import { Misc } from "../lib/filecoin-solidity/contracts/v0.8/utils/Misc.sol";
 
 contract DealRewarder {
@@ -13,12 +13,16 @@ contract DealRewarder {
     mapping(bytes => mapping(uint64 => bool)) public cidProviders;
 
     address public owner;
+    address constant CALL_ACTOR_ID = 0xfe00000000000000000000000000000000000005;
+    uint64 constant DEFAULT_FLAG = 0x00000000;
+    uint64 constant METHOD_SEND = 0;
+    uint64 public debug_client_addr;
 
     constructor() {
         owner = msg.sender;
     }
 
-    function fund() public payable {}
+    function fund(uint64 unused) public payable {}
 
     function addCID(bytes calldata cidraw, uint size) public {
        require(msg.sender == owner);
@@ -53,56 +57,27 @@ contract DealRewarder {
         send(clientRet.client);
     }
 
-    function concat(bytes32 b1, bytes32 b2) pure external returns (bytes memory)
-    {
-        bytes memory result = new bytes(64);
-        assembly {
-            mstore(add(result, 32), b1)
-            mstore(add(result, 64), b2)
-        }
-        return result;
-}
-
-    function toBytes64(uint64 x) internal pure returns (bytes memory b) {
-        b = new bytes(32);
-        assembly { mstore(add(b, 32), x) }
+    function call_actor_id(uint64 method, uint256 value, uint64 flags, uint64 codec, bytes memory params, uint64 id) public returns (bool, int256, uint64, bytes memory) {
+        (bool success, bytes memory data) = address(CALL_ACTOR_ID).delegatecall(abi.encode(method, value, flags, codec, params, id));
+        (int256 exit, uint64 return_codec, bytes memory return_value) = abi.decode(data, (int256, uint64, bytes));
+        return (success, exit, return_codec, return_value);
     }
 
     // send 1 FIL to the filecoin actor at actor_id
-    function send(uint64 actor_id) public payable {
-        uint METHOD_SEND = 0;
+    function send(uint64 actorID) public {
         bytes memory emptyParams = "";
         delete emptyParams;
-        bytes memory sendAddr = hex"0001";
 
-        uint oneFIL = 10000;
-        Actor.call_inner(METHOD_SEND, sendAddr, emptyParams, Misc.NONE_CODEC, oneFIL);
+        uint oneFIL = 1000000000000000000;
+        HyperActor.call_actor_id(METHOD_SEND, oneFIL, DEFAULT_FLAG, Misc.NONE_CODEC, emptyParams, actorID);
 
-        // handle ethereum transfers too?
     }
 
-
-    function slice_uint8(bytes memory bs, uint start) pure internal returns (uint8) {
-        require(bs.length >= start + 1, "slicing out of range");
-        uint8 x;
-        assembly {
-            x := mload(add(bs, add(0x01, start)))
-        }
-        return x;
+    function getDealClient(uint64 deal_id) public {
+            MarketTypes.GetDealClientReturn memory clientRet = MarketAPI.getDealClient(MarketTypes.GetDealClientParams({id: deal_id}));
+            debug_client_addr = clientRet.client;
     }
 
-/*
-func PutUvarint(buf []byte, x uint64) int {
-	i := 0
-	for x >= 0x80 {
-		buf[i] = byte(x) | 0x80
-		x >>= 7
-		i++
-	}
-	buf[i] = byte(x)
-	return i + 1
-}
-*/
 
 // actor id => valid id address bytes
 // make a deal and see if we can actually claim bounty
