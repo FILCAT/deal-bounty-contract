@@ -7,6 +7,16 @@ import { MarketTypes } from "../lib/filecoin-solidity/contracts/v0.8/types/Marke
 import { Actor, HyperActor } from "../lib/filecoin-solidity/contracts/v0.8/utils/Actor.sol";
 import { Misc } from "../lib/filecoin-solidity/contracts/v0.8/utils/Misc.sol";
 
+/* 
+Contract Usage
+    Step   |   Who   |    What is happening  |   Why 
+    ------------------------------------------------
+    Deploy | contract owner   | contract owner deploys address is owner who can call addCID  | create contract setting up rules to follow
+    AddCID | data pinners     | set up cids that the contract will incentivize in deals      | add request for a deal in the filecoin network, "store data" function
+    Fund   | contract funders |  add FIL to the contract to later by paid out by deal        | ensure the deal actually gets stored by providing funds for bounty hunter and (indirect) storage provider
+    Claim  | bounty hunter    | claim the incentive to complete the cycle                    | pay back the bounty hunter for doing work for the contract
+
+*/
 contract DealRewarder {
     mapping(bytes => bool) public cidSet;
     mapping(bytes => uint) public cidSizes;
@@ -16,7 +26,7 @@ contract DealRewarder {
     address constant CALL_ACTOR_ID = 0xfe00000000000000000000000000000000000005;
     uint64 constant DEFAULT_FLAG = 0x00000000;
     uint64 constant METHOD_SEND = 0;
-    uint64 public debug_client_addr;
+    
 
     constructor() {
         owner = msg.sender;
@@ -47,10 +57,9 @@ contract DealRewarder {
         MarketTypes.GetDealDataCommitmentReturn memory commitmentRet = MarketAPI.getDealDataCommitment(MarketTypes.GetDealDataCommitmentParams({id: deal_id}));
         MarketTypes.GetDealProviderReturn memory providerRet = MarketAPI.getDealProvider(MarketTypes.GetDealProviderParams({id: deal_id}));
 
-        // authorize data 
         authorizeData(commitmentRet.data, providerRet.provider, commitmentRet.size);
 
-        // get deal client
+        // get dealer (bounty hunter client)
         MarketTypes.GetDealClientReturn memory clientRet = MarketAPI.getDealClient(MarketTypes.GetDealClientParams({id: deal_id}));
 
         // send reward to client 
@@ -64,7 +73,7 @@ contract DealRewarder {
     }
 
     // send 1 FIL to the filecoin actor at actor_id
-    function send(uint64 actorID) public {
+    function send(uint64 actorID) internal {
         bytes memory emptyParams = "";
         delete emptyParams;
 
@@ -73,13 +82,5 @@ contract DealRewarder {
 
     }
 
-    function getDealClient(uint64 deal_id) public {
-            MarketTypes.GetDealClientReturn memory clientRet = MarketAPI.getDealClient(MarketTypes.GetDealClientParams({id: deal_id}));
-            debug_client_addr = clientRet.client;
-    }
-
-
-// actor id => valid id address bytes
-// make a deal and see if we can actually claim bounty
 }
 
