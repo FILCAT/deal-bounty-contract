@@ -20,7 +20,7 @@ If you build an extension to this MVP contract this repo hopes to be a good home
 
 ## Introduction to Filecoin
 
-Filecoin is an open-source cloud storage marketplace, protocol, and incentive layer. It allows a very flexible system for clients (wanting to store data) and Storage Providers (SPs) to negotiate the storage of data between them.
+[Filecoin](https://filecoin.io/) is an open-source cloud storage marketplace, protocol, and incentive layer. It allows a very flexible system for clients (wanting to store data) and Storage Providers (SPs) to negotiate the storage of data between them.
 
 The Filecoin network is a massive decentralised storage network with over 16EB of committed storage capacity across over 4,000 Storage Providers (SPs) worldwide. The Filecoin blockchain is a L1 blockchain that is used to broadcast, negotiate, and store the "storage deals" between clients (entities wanting to store data), and SPs. The actual data storage itself is carried out off-chain for efficiency and scalability.
 
