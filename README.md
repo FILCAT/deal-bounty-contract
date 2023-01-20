@@ -49,7 +49,7 @@ Step   |   Who   |    What is happening  |   Why
 --- | --- | --- | ---
 Deploy | contract owner   | contract owner deploys address is owner who can call addCID  | create contract setting up rules to follow
 AddCID | data pinners     | set up cids that the contract will incentivize in deals      | add request for a deal in the filecoin network, "store data" function
-Fund   | contract funders |  add FIL to the contract to later by paid out by deal        | ensure the deal actually gets stored by providing funds for bounty hunter and (indirect) storage provider
+Fund   | contract funders |  add FIL to the contract to later pay out deals        | ensure the deal actually gets stored by providing funds for bounty hunter and (indirect) storage provider
 Claim  | bounty hunter    | claim the incentive to complete the cycle                    | pay back the bounty hunter for doing work for the contract
 
 ### Example variants in terms of building blocks
