@@ -48,7 +48,7 @@ The deal bounty contract consists of four conceptual steps:
 Step   |   Who   |    What is happening  |   Why 
 --- | --- | --- | ---
 Deploy | contract owner   | address that deployed contracts is the owner of the contract, and the individual that can call addCID  | create a contract and setting up rules to follow
-AddCID | data pinners     | set up cids that the contract will incentivize in deals      | add request for a deal in the filecoin network, "store data" function
+AddCID | data pinners     | set up data cids that the contract will incentivize in deals      | add request for a deal in the filecoin network, "store data" function
 Fund   | contract funders |  add FIL to the contract to later pay out deals        | ensure the deal actually gets stored by providing funds for bounty hunter and (indirect) storage provider
 Claim  | bounty hunter    | claim the incentive to complete the cycle                    | pay back the bounty hunter for doing work for the contract
 
