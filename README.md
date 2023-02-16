@@ -54,7 +54,7 @@ Claim  | bounty hunter    | claim the incentive to complete the cycle           
 
 ### Example variants in terms of building blocks
 * A simple data DAO can be implemented with a client that adds the bounties through a voting mechanism
-* Perpetual storage contracts can by implemented with clients that funds deals with defi mechanisms and recycle cids from expiring deals into their authorization sets
+* Perpetual storage contracts can be implemented with clients that funds deals with defi mechanisms and recycle cids from expiring deals into their authorization sets
 * Trustless third party data funding can be implemented with 1) public ability to list the bounty 2) a funding mechanism that associates payments with particular cids 
 
 
